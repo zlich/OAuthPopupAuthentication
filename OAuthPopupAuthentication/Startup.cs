@@ -26,8 +26,8 @@ namespace OAuthPopupAuthentication
 
             var options = new GitHubAuthenticationOptions
             {
-                ClientId = "fcea73a444e355ff5b4f",
-                ClientSecret = "44bdbf1e9a644ccf25047debdceb5919fca5868d",
+                ClientId = "your cliend in",
+                ClientSecret = "your client secret",
                 Provider = new GitHubAuthenticationProvider
                 {
                     OnAuthenticated = context =>
@@ -39,6 +39,8 @@ namespace OAuthPopupAuthentication
                 }
             };
             app.UseGitHubAuthentication(options);
+
+            app.MapSignalR();
         }
     }
 }

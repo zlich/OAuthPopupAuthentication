@@ -3,16 +3,38 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET OAuth without Identity</h1>
-    <p class="lead">This sample shows how you can use the OAuth providers without having to use ASP.NET Identity</p>
-    @Html.ActionLink("Authenticate with GitHub", "AuthorizeGitHub", null, new { @class = "btn btn-primary btn-lg" })
+<div id="user-profile">
+    @Html.Partial("_UserProfilePartial", Model)
 </div>
 
-@if (!string.IsNullOrEmpty(Model.AccessToken))
-{
-    <h2>GitHub Details</h2>
-    <p>Access Token: @Model.AccessToken</p>
-    <p>Name: @Model.Name</p>
-    <img src="@Model.AvatarUrl" style="width: 100px; height: 100px;" />
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jquery")
+    
+    <script src="~/Scripts/jquery.signalR-2.2.0.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // Reference the auto-generated proxy for the hub.  
+            var authenticationHub = $.connection.authenticationHub;
+
+            // Create a function that the hub can call back to refresh the page
+            authenticationHub.client.refreshPage = function () {
+                $.get("/Home/UserProfilePartial", function (data) {
+                    $("#user-profile").html(data);
+                });
+            };
+
+            // Start the connection
+            $.connection.hub.start();
+
+            // Add click handler
+            $("#authenticate-github").click(function () {
+                window.open($(this).attr("href") + "?connectionId=" + $.connection.hub.id, "github-connect", "width=800, height=600, location=0", true);
+
+                return false;
+            });
+        });
+    </script>
 }

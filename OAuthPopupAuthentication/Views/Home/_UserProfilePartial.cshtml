@@ -1,0 +1,13 @@
+﻿@model OAuthPopupAuthentication.Models.UserDisplayModel
+
+@if (!string.IsNullOrEmpty(Model.AccessToken))
+{
+    <h2>GitHub Details</h2>
+    <p>Access Token: @Model.AccessToken</p>
+    <p>Name: @Model.Name</p>
+    <img src="@Model.AvatarUrl" style="width: 100px; height: 100px;"/>
+}
+else
+{
+    @Html.ActionLink("Authenticate with GitHub", "AuthorizeGitHub", null, new {id = "authenticate-github", @class = "btn btn-primary btn-lg"})
+}
